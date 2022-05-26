@@ -11,5 +11,4 @@ build/CMakeCache.txt
 build/Makefile
 
 #ignore build output
-build/bin/app_bin
-
+*.bin
