@@ -1,0 +1,9 @@
+enum WINDOWS_DESCRIPTIONS
+{
+    NONE = -1,
+    MAIN_WINDOW = 0,
+    WINDOW_ONE,
+    WINDOW_TWO,
+    WINDOW_THREE,
+    WINDOW_FOUR
+};  

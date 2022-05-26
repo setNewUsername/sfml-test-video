@@ -1,0 +1,15 @@
+#ignore CMake files at root dir
+CMakeFiles/
+*.cmake
+CMakeCache.txt
+Makefile
+
+#ignore CMake files at build dir
+build/CMakeFiles/
+build/*.cmake
+build/CMakeCache.txt
+build/Makefile
+
+#ignore build output
+build/bin/app_bin
+
