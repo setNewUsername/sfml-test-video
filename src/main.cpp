@@ -2,32 +2,32 @@
 #include "ScreenManager/ScreenManager.h"
 #include "ThreadManager/ThreadManager.h"
 #include "ObjectManager/ObjectManager.h"
+#include "ScreenManager/WindowFactory/WindowFactory.h"
 #include "test/test.h"
 
 using namespace std;
 
 int main(int argc, char const* argv[])
 {
+    WindowFactory winfac;
     ThreadManager thrmmgr;
 
+
     ScreenManager srcmngr;
-    srcmngr.SetupMainWindow(1000, 800);
     srcmngr.SetSharedMutex(thrmmgr.GetSharedMutex());
 
-    srcmngr.PushWindow(500, 500, "window 1", NONE);
+    srcmngr.SetWinFactory(static_cast<WindowFactoryInterface*>(&winfac));
+    srcmngr.SetWinCntrlColl(winfac.GetWindowCollection());
+
+    srcmngr.SetupMainWindow();
+    srcmngr.AddWindow(WINDOW_ONE);
 
     srcmngr.StartScreenManagerLoop();
 
-    ObjectManager objmngr(srcmngr.GetObjects());
-    objmngr.SetSharedMutex(thrmmgr.GetSharedMutex());
+    //ObjectManager objmngr(srcmngr.GetObjects());
+    //objmngr.SetSharedMutex(thrmmgr.GetSharedMutex());
 
     //thrmmgr.CreateNewThread(static_cast<ThrCliFuncType>(&ObjectManager::Test), static_cast<ThreadClient*>(&objmngr), "ObjThr");
-
-    //thrmmgr.StopThreadByTag("ObjThr");
-
-    //srcmngr.StartWindow();
-
-    //srcmngr.StartScreenManagerLoop();
 
     return 0;
 }

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef WINDOWCONTAINER_H
+#define WINDOWCONTAINER_H
 
 #include <string>
 #include <iostream>
@@ -35,7 +35,5 @@ public:
     WINDOWS_DESCRIPTIONS GetWindowDesc();
     RenderWindow* GetWindowObj();
 };
-
-
 
 #endif

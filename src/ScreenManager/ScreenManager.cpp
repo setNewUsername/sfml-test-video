@@ -1,10 +1,10 @@
 #include "ScreenManager.h"
 
 ScreenManager::ScreenManager() : 
-ObjectsToDraw(nullptr)
+ObjectsToDraw(nullptr),
+Windows(nullptr),
+PointerToWinFactory(nullptr)
 {
-    ObjectsToDraw = new vector<Drawable*>;
-    Windows = new vector<WindowContainer*>;
 }
 
 ScreenManager::~ScreenManager()
@@ -54,40 +54,28 @@ void ScreenManager::ScreenManagerLoop()
     }
 }
 
-void ScreenManager::PushWindow(unsigned int Width, unsigned int Height, string Name, WINDOWS_DESCRIPTIONS WindowDesc)
+void ScreenManager::AddWindow(WINDOWS_DESCRIPTIONS WindowDesc)
 {
-    WindowContainer* NewWindow = new WindowContainer();
-
-    NewWindow->SetWindowSize(Width, Height);
-    NewWindow->SetWindowName(Name);
-
-    if((Windows->size() == 0) && (WindowDesc != MAIN_WINDOW))
+    if(PointerToWinFactory != nullptr)
     {
-        WindowDesc = MAIN_WINDOW;
+        PointerToWinFactory->CreateWindowContainer(WindowDesc);
     }
     else
     {
-        WindowDesc = NONE;
+        cout << "WindowContainer factory doesnt exist" << endl;
     }
-
-    NewWindow->SetWindowDescriptor(WindowDesc);
-
-    NewWindow->CreateWindow();
-
-    Windows->push_back(NewWindow);
 }
 
-void ScreenManager::SetupMainWindow(unsigned int MainWindowWidth, unsigned int MainWindowHeight)
+void ScreenManager::SetupMainWindow()
 {
-    WindowContainer* MainWindow = new WindowContainer();
-
-    MainWindow->SetWindowSize(MainWindowWidth, MainWindowHeight);
-    MainWindow->SetWindowName("Main Window");
-    MainWindow->SetWindowDescriptor(MAIN_WINDOW);
-
-    MainWindow->CreateWindow();
-
-    Windows->push_back(MainWindow);
+    if(PointerToWinFactory != nullptr)
+    {
+        PointerToWinFactory->CreateWindowContainer(MAIN_WINDOW);
+    }
+    else
+    {
+        cout << "WindowContainer factory doesnt exist" << endl;
+    }
 }
 
 RenderWindow* ScreenManager::GetWindowByDesc(WINDOWS_DESCRIPTIONS WinDesc)
@@ -104,4 +92,14 @@ RenderWindow* ScreenManager::GetWindowByDesc(WINDOWS_DESCRIPTIONS WinDesc)
     }
 
     return Result;
+}
+
+void ScreenManager::SetWinFactory(WindowFactoryInterface* NewPointerToWinFactory)
+{
+    PointerToWinFactory = NewPointerToWinFactory;
+}
+
+void ScreenManager::SetWinCntrlColl(vector<WindowContainer*>* NewWinCntrlColl)
+{
+    Windows = NewWinCntrlColl;
 }

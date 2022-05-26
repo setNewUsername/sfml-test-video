@@ -1,3 +1,7 @@
+#pragma once
+#ifndef WINDOWCONTEINERENUM_H
+#define WINDOWCONTEINERENUM_H
+
 enum WINDOWS_DESCRIPTIONS
 {
     NONE = -1,
@@ -7,3 +11,5 @@ enum WINDOWS_DESCRIPTIONS
     WINDOW_THREE,
     WINDOW_FOUR
 };  
+
+#endif

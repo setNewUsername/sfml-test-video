@@ -7,6 +7,7 @@
 
 #include "../ThreadClient/ThreadClient.h"
 #include "Window/WindowContainer.h"
+#include "WindowFactory/WindowFactoryInterface.h"
 
 using namespace sf;
 using namespace std;
@@ -18,11 +19,12 @@ private:
     Contains pointers to Drawable objects
     */
     vector<Drawable*>* ObjectsToDraw;
-
     /*
     Contains pointers to containers for RenredWindow 
     */
     vector<WindowContainer*>* Windows;
+
+    WindowFactoryInterface* PointerToWinFactory;
 
     /*
     Draw all windows
@@ -48,11 +50,15 @@ public:
     /*
     Setups main window with MAIN_WINDOW descriptor
     */
-    void SetupMainWindow(unsigned int MainWindowWidth, unsigned int MainWindowHeight);
+    void SetupMainWindow();
+
+    void SetWinFactory(WindowFactoryInterface* NewPointerToWinFactory);
+
+    void SetWinCntrlColl(vector<WindowContainer*>* NewWinCntrlColl);
 
     /*
     Add new window. If its first window, get MAIN_WINDOW descriptor
     */
-    void PushWindow(unsigned int Width, unsigned int Height, string Name, WINDOWS_DESCRIPTIONS WindowDesc);
+    void AddWindow(WINDOWS_DESCRIPTIONS WindowDesc);
 };
 #endif
