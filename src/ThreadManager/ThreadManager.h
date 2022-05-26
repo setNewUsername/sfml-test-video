@@ -17,6 +17,9 @@ class ThreadManager
 private:
     mutex SharedMutex;
 
+    /*
+    Syb class. Contains thread
+    */
     class AliveThread
     {
     private:
@@ -33,6 +36,9 @@ private:
         string GetTag();
     };
     
+    /*
+    Contains pointers to thread containers
+    */
     vector<AliveThread*> AliveThreadsColl;
 
     AliveThread* GetThreadByTag(string ThreadTag);
@@ -41,10 +47,19 @@ public:
     ThreadManager();
     ~ThreadManager();
 
+    /*
+    Creates new thread for method of object
+    */
     void CreateNewThread(void(ThreadClient::*Func)(), ThreadClient* obj, string NewThreadTag);
 
+    /*
+    Kills thread by tag
+    */
     void StopThreadByTag(string ThreadTag);
 
+    /*
+    Returns mutex for all threads
+    */
     mutex* GetSharedMutex();
 };
 #endif

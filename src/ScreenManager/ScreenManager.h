@@ -14,18 +14,19 @@ using namespace std;
 class ScreenManager : public ThreadClient
 {
 private:
+    /*
+    Contains pointers to Drawable objects
+    */
     vector<Drawable*>* ObjectsToDraw;
+
+    /*
+    Contains pointers to containers for RenredWindow 
+    */
     vector<WindowContainer*>* Windows;
 
-    Drawable* DrawableToAdd;
-
-    int ScreenWidth;
-    int ScreenHeight;
-
-    bool ScreenSizeChanged;
-
-    RenderWindow* ScreenWindow;
-
+    /*
+    Draw all windows
+    */
     void ScreenManagerLoop();
 
 public:
@@ -34,12 +35,24 @@ public:
 
     vector<Drawable*>* GetObjects();
 
+    /*
+    Returns pointer to window
+    */
     RenderWindow* GetWindowByDesc(WINDOWS_DESCRIPTIONS WinDesc);
 
+    /*
+    Initiates ScreenManagerLoop in new thread
+    */
     void StartScreenManagerLoop();
-    void SetScreenSize(int NewScreenWidth, int NewScreenHeight);
-    void SetupMainWindow();
-    void AddDrawableObject(Drawable* ObjectToDraw);
+    
+    /*
+    Setups main window with MAIN_WINDOW descriptor
+    */
+    void SetupMainWindow(unsigned int MainWindowWidth, unsigned int MainWindowHeight);
+
+    /*
+    Add new window. If its first window, get MAIN_WINDOW descriptor
+    */
     void PushWindow(unsigned int Width, unsigned int Height, string Name, WINDOWS_DESCRIPTIONS WindowDesc);
 };
 #endif

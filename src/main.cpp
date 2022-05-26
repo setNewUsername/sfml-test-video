@@ -11,8 +11,7 @@ int main(int argc, char const* argv[])
     ThreadManager thrmmgr;
 
     ScreenManager srcmngr;
-    srcmngr.SetScreenSize(1000, 800);
-    srcmngr.SetupMainWindow();
+    srcmngr.SetupMainWindow(1000, 800);
     srcmngr.SetSharedMutex(thrmmgr.GetSharedMutex());
 
     srcmngr.PushWindow(500, 500, "window 1", NONE);

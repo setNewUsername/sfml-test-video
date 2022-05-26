@@ -1,10 +1,6 @@
 #include "ScreenManager.h"
 
 ScreenManager::ScreenManager() : 
-ScreenWidth(100),
-ScreenHeight(100),
-ScreenWindow(nullptr),
-ScreenSizeChanged(false),
 ObjectsToDraw(nullptr)
 {
     ObjectsToDraw = new vector<Drawable*>;
@@ -13,12 +9,6 @@ ObjectsToDraw(nullptr)
 
 ScreenManager::~ScreenManager()
 {
-}
-
-void ScreenManager::SetScreenSize(int NewScreenWidth, int NewScreenHeight)
-{
-    ScreenWidth = NewScreenWidth;
-    ScreenHeight = NewScreenHeight;
 }
 
 vector<Drawable*>* ScreenManager::GetObjects()
@@ -41,7 +31,9 @@ void ScreenManager::ScreenManagerLoop()
         ScreenEvents.push_back(new Event());
     }
 
-    while((*Windows)[0]->GetWindowObj()->isOpen())
+    RenderWindow* MainWindow = GetWindowByDesc(MAIN_WINDOW);
+
+    while(MainWindow->isOpen())
     {
         for(int i = 0; i < Windows->size(); i++)
         {
@@ -85,11 +77,11 @@ void ScreenManager::PushWindow(unsigned int Width, unsigned int Height, string N
     Windows->push_back(NewWindow);
 }
 
-void ScreenManager::SetupMainWindow()
+void ScreenManager::SetupMainWindow(unsigned int MainWindowWidth, unsigned int MainWindowHeight)
 {
     WindowContainer* MainWindow = new WindowContainer();
 
-    MainWindow->SetWindowSize(1000, 800);
+    MainWindow->SetWindowSize(MainWindowWidth, MainWindowHeight);
     MainWindow->SetWindowName("Main Window");
     MainWindow->SetWindowDescriptor(MAIN_WINDOW);
 

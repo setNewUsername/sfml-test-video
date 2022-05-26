@@ -15,8 +15,10 @@ class WindowContainer
 {
 private:
     string WindowName;
+
     int WindowWidth;
     int WindowHeight;
+
     RenderWindow* WindowObj;
     WINDOWS_DESCRIPTIONS WindowDesciptor;
 
@@ -27,6 +29,7 @@ public:
     void SetWindowSize(unsigned int NewWindowWidth, unsigned int NewWindowHeight);
     void SetWindowName(string NewWindowName);
     void SetWindowDescriptor(WINDOWS_DESCRIPTIONS NewWindowDescriptor);
+
     void CreateWindow();
 
     WINDOWS_DESCRIPTIONS GetWindowDesc();
