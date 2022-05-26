@@ -4,4 +4,4 @@ cmake CMakeLists.txt
 
 make
 
-mv build/app_bin.bin build/bin
+mv build/app_bin.bin build/build-output
