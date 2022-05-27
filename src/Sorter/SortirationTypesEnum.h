@@ -1,0 +1,12 @@
+#pragma once
+#ifndef SORTIRATIONTYPESENUM_H
+#define SORTIRATIONTYPESENUM_H
+
+enum SORTIRATIONTYPE
+{
+    NONE_SORT = -1,
+    SELECTION_SORT,
+    BUBBLE_SORT
+};
+
+#endif

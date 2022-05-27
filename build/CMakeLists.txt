@@ -8,6 +8,11 @@ find_package(SFML COMPONENTS graphics window system)
 
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 set(SCREEN_MANAGER_DIR ${SRC_DIR}/ScreenManager)
+set(SORTER_DIR ${SRC_DIR}/Sorter)
+
+
+
+#visualisation module
 
 set(SCREEN_MANAGER ${SRC_DIR}/ScreenManager/ScreenManager.cpp ${SRC_DIR}/ScreenManager/ScreenManager.cpp)
 
@@ -27,9 +32,35 @@ set(WINDOW_CONTAINER_FACTORY ${SCREEN_MANAGER_DIR}/WindowFactory/WindowFactory.c
                              ${SCREEN_MANAGER_DIR}/WindowFactory/WindowFactory.h 
                              ${SCREEN_MANAGER_DIR}/WindowFactory/WindowFactoryInterface.h)
 
+#visualisation module
+
+
+
+#array module
+
+set(ARRAY_CONTAINER ${SRC_DIR}/ArrayContainer/ArrayContainer.cpp ${SRC_DIR}/ArrayContainer/ArrayContainer.h)
+
+#array module
+
+
+
+#sortiration module
+
+set(SORTER ${SRC_DIR}/Sorter/Sorter.cpp ${SRC_DIR}/Sorter/Sorter.h ${SRC_DIR}/Sorter/SortirationTypesEnum.h)
+
+set(BUBBLE_SORTER ${SORTER_DIR}/BubbleSorter/BubbleSorter.cpp ${SORTER_DIR}/BubbleSorter/BubbleSorter.h)
+
+set(SORTER_FACTORY ${SORTER_DIR}/SorterFactory/SorterFactory.cpp ${SORTER_DIR}/SorterFactory/SorterFactory.h)
+
+#sortiration module
+
+
+
 set(TEST_CLASS ${SRC_DIR}/test/test.cpp ${SRC_DIR}/test/test.h)
 
 add_executable(${PROJECT_NAME} ${SRC_DIR}/main.cpp)
+
+#visualisation module
 
 target_sources(${PROJECT_NAME} PUBLIC ${SCREEN_MANAGER})
 
@@ -44,5 +75,23 @@ target_sources(${PROJECT_NAME} PUBLIC ${TEST_CLASS})
 target_sources(${PROJECT_NAME} PUBLIC ${WINDOW_CONTAINER})
 
 target_sources(${PROJECT_NAME} PUBLIC ${WINDOW_CONTAINER_FACTORY})
+
+#visualisation module
+
+#array module
+
+target_sources(${PROJECT_NAME} PUBLIC ${ARRAY_CONTAINER})
+
+#array module
+
+#sortiration module
+
+target_sources(${PROJECT_NAME} PUBLIC ${SORTER})
+
+target_sources(${PROJECT_NAME} PUBLIC ${BUBBLE_SORTER})
+
+target_sources(${PROJECT_NAME} PUBLIC ${SORTER_FACTORY})
+
+#sortiration module
 
 target_link_libraries(${PROJECT_NAME}  sfml-graphics sfml-window sfml-system)
