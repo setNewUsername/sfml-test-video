@@ -5,17 +5,22 @@
 #include "../Window/WindowContainer.h"
 #include "../Window/WindowContainerEnum.h"
 #include "WindowFactoryInterface.h"
+#include "../../MsgDistributor/MessageDistributor.h"
+#include "../../MsgDistributor/Message/MessageFactory/MessageFactory.h"
 
 class WindowFactory : public WindowFactoryInterface
 {
 private:
+    MessageDistributor* MsgDistr;
+    MessageFactory* MsgFac;
+
     WindowContainer* CreateMainWindow();
     WindowContainer* CreateWindowOne();
 
     vector<WindowContainer*>* WinContColl;
 
 public:
-    WindowFactory();
+    WindowFactory(MessageDistributor* NewMsgDistr, MessageFactory* NewMsgFac);
     ~WindowFactory();
 
     /*

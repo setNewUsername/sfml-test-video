@@ -2,7 +2,15 @@
 #ifndef OBJECTMANAGER_H
 #define OBJECTMANAGER_H
 
-#include "../ThreadClient/ThreadClient.h"
+#include "../MsgDistributor/MessageClient/MessageClientEnum.h"
+#include "../MsgDistributor/MessageClient/MessageClient.h"
+#include "../MsgDistributor/MessageDistributor.h"
+#include "../MsgDistributor/Message/MsgBodyEnum.h"
+
+#include "../MsgDistributor/MessageDistributor.h"
+#include "../MsgDistributor/Message/MessageFactory/MessageFactory.h"
+
+#include "../MsgDistributor/Message/AnswerMessages/AnswerMessages.h"
 
 #include <thread>
 #include <iostream>
@@ -13,15 +21,17 @@
 using namespace std;
 using namespace sf;
 
-class ObjectManager : public ThreadClient
+class ObjectManager : public MessageClient
 {
 private:
-    vector<sf::Drawable*>* ObjetsVec;
+    vector<sf::Drawable*>* ObjectCollection;
 
 public:
-    ObjectManager(vector<sf::Drawable*>* Objects);
+    ObjectManager(MessageDistributor* NewMsgDistr, MessageFactory* NewMsgFac);
     ~ObjectManager();
 
-    void Test();
+    void CreateTestObjects(int ObjectsAmount);
+
+    DefaultAnswerMessage* ConstructAnswer() override;
 };
 #endif

@@ -8,47 +8,64 @@
 #include "Sorter/BubbleSorter/BubbleSorter.h"
 #include "Sorter/SorterFactory/SorterFactory.h"
 #include "Sorter/SortirationTypesEnum.h"
+#include "MsgDistributor/MessageDistributor.h"
+#include "MsgDistributor/Message/MessageFactory/MessageFactory.h"
 
 using namespace std;
 
 int main(int argc, char const* argv[])
 {
-    //WindowFactory winfac;
-    //ThreadManager thrmmgr;
+    MessageDistributor msgdistr;
+    MessageFactory msgfac;
 
-    //ScreenManager srcmngr;
-    //srcmngr.SetSharedMutex(thrmmgr.GetSharedMutex());
+    WindowFactory winfac(&msgdistr, &msgfac);
+    ObjectManager objmgr(&msgdistr, &msgfac);
+    ThreadManager thrmmgr;
 
-    //srcmngr.SetWinFactory(static_cast<WindowFactoryInterface*>(&winfac));
-    //srcmngr.SetWinCntrlColl(winfac.GetWindowCollection());
+    ScreenManager srcmngr;
+    srcmngr.SetSharedMutex(thrmmgr.GetSharedMutex());
+    srcmngr.SetWinFactory(static_cast<WindowFactoryInterface*>(&winfac));
+    srcmngr.SetWinCntrlColl(winfac.GetWindowCollection());
+    srcmngr.SetupMainWindow();
+    
+    thrmmgr.CreateNewThread(static_cast<ThrCliFuncType>(&MessageDistributor::SetupMessageLoop), static_cast<ThreadClient*>(&msgdistr), "ObjThr");
 
-    //srcmngr.SetupMainWindow();
-    //srcmngr.AddWindow(WINDOW_ONE);
+    cout << "Hello 1" << endl;
+
+    //WindowContainer* MainWindow = srcmngr.GetWindowContainerByDesc(MAIN_WINDOW);
+
+    //MainWindow->SetupMessage(MSG_GET_OBJ_TO_DRAW, OBJECT_MANAGER_MSG_CLI);
+
+    //AnswerObjMgr* AnswerFromObjectMgr = static_cast<AnswerObjMgr*>(MainWindow->GetAnswerFromRecipient());
+
+    //MainWindow->SetDrawableObjectCollection(AnswerFromObjectMgr->GetDrawableCollection());
 
     //srcmngr.StartScreenManagerLoop();
+
+    cout << "Hello 2" << endl;
 
     //ObjectManager objmngr(srcmngr.GetObjects());
     //objmngr.SetSharedMutex(thrmmgr.GetSharedMutex());
 
     //thrmmgr.CreateNewThread(static_cast<ThrCliFuncType>(&ObjectManager::Test), static_cast<ThreadClient*>(&objmngr), "ObjThr");
 
-    ArrayContainer arrcont;
+    //ArrayContainer arrcont;
 
-    arrcont.CreateArray(1000);
+    //arrcont.CreateArray(1000);
 
-    arrcont.SetRandRange(0, 10);
+    //arrcont.SetRandRange(0, 10);
 
-    arrcont.PrintArray();
+    //arrcont.PrintArray();
 
-    SorterFactory fact;
+    //SorterFactory fact;
 
-    BubbleSorter* srt = static_cast<BubbleSorter*>(fact.CreateSort(SELECTION_SORT));
+    //BubbleSorter* srt = dynamic_cast<BubbleSorter*>(fact.CreateSort(BUBBLE_SORT));
 
-    srt->SetArrayContPointer(&arrcont);
+    //srt->SetArrayContPointer(&arrcont);
 
-    srt->SortArray();
+    //srt->SortArray();
 
-    arrcont.PrintArray();
+    //arrcont.PrintArray();
 
     return 0;
 }

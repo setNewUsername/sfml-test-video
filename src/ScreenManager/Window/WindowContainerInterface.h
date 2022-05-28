@@ -7,8 +7,11 @@ class WindowContainerInterface
 private:
     
 public:
-    WindowContainerInterface();
-    virtual ~WindowContainerInterface() = 0;
+    WindowContainerInterface() {};
+    virtual ~WindowContainerInterface() {};
+
+    virtual int GetWidth() = 0;
+    virtual int GetHeight() = 0;
 };
 
 #endif

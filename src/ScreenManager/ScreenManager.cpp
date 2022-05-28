@@ -1,7 +1,6 @@
 #include "ScreenManager.h"
 
 ScreenManager::ScreenManager() : 
-ObjectsToDraw(nullptr),
 Windows(nullptr),
 PointerToWinFactory(nullptr)
 {
@@ -11,15 +10,11 @@ ScreenManager::~ScreenManager()
 {
 }
 
-vector<Drawable*>* ScreenManager::GetObjects()
-{
-    return ObjectsToDraw;
-}
-
 void ScreenManager::StartScreenManagerLoop()
 {
     Thread thr(&ScreenManager::ScreenManagerLoop, this);
     thr.launch();
+    //ScreenManagerLoop();
 }
 
 void ScreenManager::ScreenManagerLoop()
@@ -48,6 +43,7 @@ void ScreenManager::ScreenManagerLoop()
         {
             CurrentWindow->GetWindowObj()->clear(Color::White);
 
+            CurrentWindow->DrawObjects();
         
             CurrentWindow->GetWindowObj()->display();
         }
@@ -87,6 +83,22 @@ RenderWindow* ScreenManager::GetWindowByDesc(WINDOWS_DESCRIPTIONS WinDesc)
         if(CurrentWindowCont->GetWindowDesc() == WinDesc)
         {
             Result = CurrentWindowCont->GetWindowObj();
+            break;
+        }
+    }
+
+    return Result;
+}
+
+WindowContainer* ScreenManager::GetWindowContainerByDesc(WINDOWS_DESCRIPTIONS WinDesc)
+{
+    WindowContainer* Result;
+
+    for(auto CurrentWindowCont : *Windows)
+    {
+        if(CurrentWindowCont->GetWindowDesc() == WinDesc)
+        {
+            Result = CurrentWindowCont;
             break;
         }
     }

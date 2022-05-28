@@ -16,10 +16,6 @@ class ScreenManager : public ThreadClient
 {
 private:
     /*
-    Contains pointers to Drawable objects
-    */
-    vector<Drawable*>* ObjectsToDraw;
-    /*
     Contains pointers to containers for RenredWindow 
     */
     vector<WindowContainer*>* Windows;
@@ -41,6 +37,7 @@ public:
     Returns pointer to window
     */
     RenderWindow* GetWindowByDesc(WINDOWS_DESCRIPTIONS WinDesc);
+    WindowContainer* GetWindowContainerByDesc(WINDOWS_DESCRIPTIONS WinDesc);
 
     /*
     Initiates ScreenManagerLoop in new thread
