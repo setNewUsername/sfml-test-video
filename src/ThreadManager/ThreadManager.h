@@ -7,7 +7,6 @@
 #include <mutex>
 #include <iostream>
 
-#include "../ObjectManager/ObjectManager.h"
 #include "../ThreadClient/ThreadClient.h"
 
 using namespace std;

@@ -1,15 +1,8 @@
 #include "ObjectManager.h"
 
-ObjectManager::ObjectManager(MessageDistributor* NewMsgDistr, MessageFactory* NewMsgFac) : 
+ObjectManager::ObjectManager() : 
 ObjectCollection(nullptr)
 {
-    this->SetMsgClientName(OBJECT_MANAGER_MSG_CLI);
-    this->SetMsgClientTag("obj manager");
-    this->SetMessageFactory(NewMsgFac);
-    this->SetMsgDistr(NewMsgDistr);
-
-    this->GetMsgDistributor()->RegMsgClient(static_cast<MessageClientInterface*>(this));
-
     ObjectCollection = new vector<Drawable*>;
 
     CreateTestObjects(1000);
@@ -39,20 +32,4 @@ void ObjectManager::CreateTestObjects(int ObjectsAmount)
             y+=10;
         }
     }
-}
-
-DefaultAnswerMessage* ObjectManager::ConstructAnswer()
-{
-    switch (GetMessageToAnswer()->GetMessageBody())
-    {
-    case MSG_GET_OBJ_TO_DRAW:
-        return new AnswerObjMgr(ObjectCollection);
-        break;
-    
-    default:
-        return new AnswerObjMgr(new vector<Drawable*>);
-        break;
-    }
-    
-    
 }

@@ -9,7 +9,7 @@ find_package(SFML COMPONENTS graphics window system)
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 set(SCREEN_MANAGER_DIR ${SRC_DIR}/ScreenManager)
 set(SORTER_DIR ${SRC_DIR}/Sorter)
-set(MESSAGE_DISTR_DIR ${SRC_DIR}/MsgDistributor)
+set(MESSAGE_DISTR_DIR ${SRC_DIR}/MessageModule)
 
 
 #visualisation module
@@ -57,27 +57,18 @@ set(SORTER_FACTORY ${SORTER_DIR}/SorterFactory/SorterFactory.cpp ${SORTER_DIR}/S
 
 #messaging module
 
-set(MSG_DISTR ${MESSAGE_DISTR_DIR}/MessageDistributor.cpp ${MESSAGE_DISTR_DIR}/MessageDistributor.h)
+set(MSG_DISTR ${MESSAGE_DISTR_DIR}/MsgDistr/MsgDistr.cpp ${MESSAGE_DISTR_DIR}/MsgDistr/MsgDistr.h)
 
-set(MSG_CLIENT ${MESSAGE_DISTR_DIR}/MessageClient/MessageClient.cpp
-               ${MESSAGE_DISTR_DIR}/MessageClient/MessageClient.h
-               ${MESSAGE_DISTR_DIR}/MessageClient/MessageClientEnum.h
-               ${MESSAGE_DISTR_DIR}/MessageClient/MessageClientInterface.h)
+set(MSG_CLIENT ${MESSAGE_DISTR_DIR}/MsgClient/MsgClient.cpp
+               ${MESSAGE_DISTR_DIR}/MsgClient/MsgClient.h
+               ${MESSAGE_DISTR_DIR}/MsgClient/MsgClientName.h
+               ${MESSAGE_DISTR_DIR}/MsgClient/MsgClientInterface.h)
 
-set(MESSAGE ${MESSAGE_DISTR_DIR}/Message/Message.cpp
-            ${MESSAGE_DISTR_DIR}/Message/Message.h
-            ${MESSAGE_DISTR_DIR}/Message/MsgBodyEnum.h)
-
-set(MESSAGE_FACTORY ${MESSAGE_DISTR_DIR}/Message/MessageFactory/MessageFactory.cpp
-                    ${MESSAGE_DISTR_DIR}/Message/MessageFactory/MessageFactory.h)
-
-set(ANSWER_MESSAGES ${MESSAGE_DISTR_DIR}/Message/AnswerMessages/AnswerMessages.cpp
-                    ${MESSAGE_DISTR_DIR}/Message/AnswerMessages/AnswerMessages.h)
+set(MESSAGE ${MESSAGE_DISTR_DIR}/Msg/BaseMessage.cpp
+            ${MESSAGE_DISTR_DIR}/Msg/BaseMessage.h
+            ${MESSAGE_DISTR_DIR}/Msg/MsgRequestBody.h)
 
 #messaging module
-
-
-set(TEST_CLASS ${SRC_DIR}/test/test.cpp ${SRC_DIR}/test/test.h)
 
 add_executable(${PROJECT_NAME} ${SRC_DIR}/main.cpp)
 
@@ -90,8 +81,6 @@ target_sources(${PROJECT_NAME} PUBLIC ${THREAD_MANAGER})
 target_sources(${PROJECT_NAME} PUBLIC ${OBJECT_MANAGER})
 
 target_sources(${PROJECT_NAME} PUBLIC ${THREAD_CLIENT})
-
-target_sources(${PROJECT_NAME} PUBLIC ${TEST_CLASS})
 
 target_sources(${PROJECT_NAME} PUBLIC ${WINDOW_CONTAINER})
 
@@ -123,10 +112,6 @@ target_sources(${PROJECT_NAME} PUBLIC ${MSG_DISTR})
 target_sources(${PROJECT_NAME} PUBLIC ${MSG_CLIENT})
 
 target_sources(${PROJECT_NAME} PUBLIC ${MESSAGE})
-
-target_sources(${PROJECT_NAME} PUBLIC ${MESSAGE_FACTORY})
-
-target_sources(${PROJECT_NAME} PUBLIC ${ANSWER_MESSAGES})
 
 #messaging module
 

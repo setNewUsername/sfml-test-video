@@ -5,7 +5,7 @@
 #include "../ArrayContainer/ArrayContainer.h"
 #include "../ThreadClient/ThreadClient.h"
 
-class Sorter : public ThreadClient
+class Sorter// : public ThreadClient
 {
 private:
     ArrayContainer* ArrayContPointer;

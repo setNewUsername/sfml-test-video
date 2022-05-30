@@ -9,14 +9,10 @@
 #include "WindowContainerEnum.h"
 #include "WindowContainerInterface.h"
 
-#include "../../MsgDistributor/MessageClient/MessageClientEnum.h"
-#include "../../MsgDistributor/MessageClient/MessageClient.h"
-#include "../../MsgDistributor/Message/MsgBodyEnum.h"
-
 using namespace std;
 using namespace sf;
 
-class WindowContainer : public WindowContainerInterface, public MessageClient
+class WindowContainer : public WindowContainerInterface
 {
 private:
     string WindowName;

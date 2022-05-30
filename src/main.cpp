@@ -1,71 +1,96 @@
 #include <iostream>
-#include "ScreenManager/ScreenManager.h"
 #include "ThreadManager/ThreadManager.h"
-#include "ObjectManager/ObjectManager.h"
-#include "ScreenManager/WindowFactory/WindowFactory.h"
-#include "test/test.h"
-#include "ArrayContainer/ArrayContainer.h"
-#include "Sorter/BubbleSorter/BubbleSorter.h"
-#include "Sorter/SorterFactory/SorterFactory.h"
-#include "Sorter/SortirationTypesEnum.h"
-#include "MsgDistributor/MessageDistributor.h"
-#include "MsgDistributor/Message/MessageFactory/MessageFactory.h"
+
+#include "MessageModule/MsgDistr/MsgDistr.h"
+#include "MessageModule/MsgClient/MsgClient.h"
+#include "MessageModule/MsgClient/MsgClientName.h"
+
+#include "MessageModule/Msg/BaseMessage.h"
+#include "MessageModule/Msg/MsgRequestBody.h"
 
 using namespace std;
 
+class test : public MsgClient
+{
+private:
+    MsgCliName Recipient;
+    std::chrono::milliseconds Duration;
+
+public:
+    test(MsgCliName NewRecipient, std::chrono::milliseconds NewDuration)
+    { 
+        Recipient = NewRecipient; 
+        Duration = NewDuration;
+    };
+    ~test(){};
+
+    MessageAnswer* ConstructAnswer(MessageRequest* MessageToAnswerTo)
+    {
+        MessageAnswer* Answer = nullptr;
+        if(MessageToAnswerTo->GetMessageBody() == MSG_REQ_GET_0)
+        {
+            Answer = new MessageAnswer();
+            Answer->SetMessageRecipient(MessageToAnswerTo->GetMessageSender());
+            Answer->SetMessageSender(this->GetClientName());
+        }
+        delete(MessageToAnswerTo);
+        return Answer;
+    };
+
+    void ReactToAnswer(MessageAnswer* AnswerToReactTo)
+    {
+        cout << "Got answer from " << AnswerToReactTo->GetMessageSender() << endl;
+        delete(AnswerToReactTo);
+    };
+
+    void Test()
+    {
+        while(1)
+        {
+            MessageRequest* mes = new MessageRequest(MSG_REQ_GET_0);
+
+            mes->SetMessageSender(this->GetClientName());
+            mes->SetMessageRecipient(Recipient);
+
+            this->AddMessage(mes);
+
+            std::this_thread::sleep_for(Duration);
+        }
+    }
+};
+
 int main(int argc, char const* argv[])
 {
-    MessageDistributor msgdistr;
-    MessageFactory msgfac;
+    ThreadManager thrmgr;
+    MsgDistr* msgdistr = new MsgDistr;
 
-    WindowFactory winfac(&msgdistr, &msgfac);
-    ObjectManager objmgr(&msgdistr, &msgfac);
-    ThreadManager thrmmgr;
+    msgdistr->SetSharedMutex(thrmgr.GetSharedMutex());
+    msgdistr->SetThreadClientTag("msg_distr");
 
-    ScreenManager srcmngr;
-    srcmngr.SetSharedMutex(thrmmgr.GetSharedMutex());
-    srcmngr.SetWinFactory(static_cast<WindowFactoryInterface*>(&winfac));
-    srcmngr.SetWinCntrlColl(winfac.GetWindowCollection());
-    srcmngr.SetupMainWindow();
-    
-    thrmmgr.CreateNewThread(static_cast<ThrCliFuncType>(&MessageDistributor::SetupMessageLoop), static_cast<ThreadClient*>(&msgdistr), "ObjThr");
+    thrmgr.CreateNewThread(static_cast<ThrCliFuncType>(&MsgDistr::StartMessagingLoop), msgdistr, "");
 
-    cout << "Hello 1" << endl;
+    test* cli0 = new test(MSG_CLI_1, 2000ms);
 
-    //WindowContainer* MainWindow = srcmngr.GetWindowContainerByDesc(MAIN_WINDOW);
+    cli0->SetSharedMutex(thrmgr.GetSharedMutex());
 
-    //MainWindow->SetupMessage(MSG_GET_OBJ_TO_DRAW, OBJECT_MANAGER_MSG_CLI);
+    cli0->SetClientName(MSG_CLI_0);
+    cli0->SetClientTag("cli_0");
+    cli0->SetThreadClientTag("cli_0");
 
-    //AnswerObjMgr* AnswerFromObjectMgr = static_cast<AnswerObjMgr*>(MainWindow->GetAnswerFromRecipient());
+    msgdistr->RegistrClient(static_cast<MsgClientInterface*>(cli0));
 
-    //MainWindow->SetDrawableObjectCollection(AnswerFromObjectMgr->GetDrawableCollection());
+    test* cli1 = new test(MSG_CLI_0, 5000ms);
 
-    //srcmngr.StartScreenManagerLoop();
+    cli1->SetSharedMutex(thrmgr.GetSharedMutex());
 
-    cout << "Hello 2" << endl;
+    cli1->SetClientName(MSG_CLI_1);
+    cli1->SetClientTag("cli_1");
+    cli1->SetThreadClientTag("cli_1");
 
-    //ObjectManager objmngr(srcmngr.GetObjects());
-    //objmngr.SetSharedMutex(thrmmgr.GetSharedMutex());
+    msgdistr->RegistrClient(static_cast<MsgClientInterface*>(cli1));
 
-    //thrmmgr.CreateNewThread(static_cast<ThrCliFuncType>(&ObjectManager::Test), static_cast<ThreadClient*>(&objmngr), "ObjThr");
+    thrmgr.CreateNewThread(static_cast<ThrCliFuncType>(&test::Test), cli0, "");
+    thrmgr.CreateNewThread(static_cast<ThrCliFuncType>(&test::Test), cli1, "");
 
-    //ArrayContainer arrcont;
-
-    //arrcont.CreateArray(1000);
-
-    //arrcont.SetRandRange(0, 10);
-
-    //arrcont.PrintArray();
-
-    //SorterFactory fact;
-
-    //BubbleSorter* srt = dynamic_cast<BubbleSorter*>(fact.CreateSort(BUBBLE_SORT));
-
-    //srt->SetArrayContPointer(&arrcont);
-
-    //srt->SortArray();
-
-    //arrcont.PrintArray();
-
-    return 0;
+    while(1){}
 }

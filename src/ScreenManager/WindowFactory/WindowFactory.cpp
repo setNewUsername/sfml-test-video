@@ -1,13 +1,8 @@
 #include "WindowFactory.h"
 
-WindowFactory::WindowFactory(MessageDistributor* NewMsgDistr, MessageFactory* NewMsgFac) : 
-WinContColl(nullptr),
-MsgDistr(nullptr),
-MsgFac(nullptr)
+WindowFactory::WindowFactory() : 
+WinContColl(nullptr)
 {
-    MsgDistr = NewMsgDistr;
-    MsgFac = NewMsgFac;
-
     WinContColl = new vector<WindowContainer*>;
 }
 
@@ -43,12 +38,6 @@ WindowContainer* WindowFactory::CreateMainWindow()
     NewWindow->SetWindowName("Main window");
     NewWindow->SetWindowDescriptor(MAIN_WINDOW);
     NewWindow->CreateWindow();
-
-    NewWindow->SetMessageFactory(MsgFac);
-    NewWindow->SetMsgDistr(MsgDistr);
-    NewWindow->SetMsgClientTag("main_window");
-    NewWindow->SetMsgClientName(MAIN_WINDOW_MSG_CLI);
-    NewWindow->GetMsgDistributor()->RegMsgClient(static_cast<MessageClientInterface*>(NewWindow));
 
     return NewWindow;
 }
