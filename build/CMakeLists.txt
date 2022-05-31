@@ -10,11 +10,9 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 set(SCREEN_MANAGER_DIR ${SRC_DIR}/ScreenManager)
 set(SORTER_DIR ${SRC_DIR}/Sorter)
 set(MESSAGE_DISTR_DIR ${SRC_DIR}/MessageModule)
-
+set(VISUAL_MODULE_DIR ${SRC_DIR}/VisualModule)
 
 #visualisation module
-
-set(SCREEN_MANAGER ${SRC_DIR}/ScreenManager/ScreenManager.cpp ${SRC_DIR}/ScreenManager/ScreenManager.cpp)
 
 set(THREAD_MANAGER ${SRC_DIR}/ThreadManager/ThreadManager.cpp ${SRC_DIR}/ThreadManager/ThreadManager.h)
 
@@ -22,16 +20,13 @@ set(OBJECT_MANAGER ${SRC_DIR}/ObjectManager/ObjectManager.cpp ${SRC_DIR}/ObjectM
 
 set(THREAD_CLIENT ${SRC_DIR}/ThreadClient/ThreadClient.cpp ${SRC_DIR}/ThreadClient/ThreadClient.h)
 
-set(THREAD_CLIENT ${SRC_DIR}/ThreadClient/ThreadClient.cpp ${SRC_DIR}/ThreadClient/ThreadClient.h)
+set(WINDOW ${VISUAL_MODULE_DIR}/Window/BaseWindow.h
+           ${VISUAL_MODULE_DIR}/Window/BaseWindow.cpp
+           ${VISUAL_MODULE_DIR}/Window/WindowInterface.h
+           ${VISUAL_MODULE_DIR}/Window/WindowType.h)
 
-set(WINDOW_CONTAINER ${SCREEN_MANAGER_DIR}/Window/WindowContainer.cpp 
-                     ${SCREEN_MANAGER_DIR}/Window/WindowContainer.h
-                     ${SCREEN_MANAGER_DIR}/Window/WindowContainerEnum.h
-                     ${SCREEN_MANAGER_DIR}/Window/WindowContainerInterface.h)
-
-set(WINDOW_CONTAINER_FACTORY ${SCREEN_MANAGER_DIR}/WindowFactory/WindowFactory.cpp
-                             ${SCREEN_MANAGER_DIR}/WindowFactory/WindowFactory.h 
-                             ${SCREEN_MANAGER_DIR}/WindowFactory/WindowFactoryInterface.h)
+set(WINDOW_FACTORY ${VISUAL_MODULE_DIR}/WindowFactory/WindowFactory.h
+                   ${VISUAL_MODULE_DIR}/WindowFactory/WindowFactory.cpp)
 
 #visualisation module
 
@@ -77,17 +72,15 @@ add_executable(${PROJECT_NAME} ${SRC_DIR}/main.cpp)
 
 #visualisation module
 
-target_sources(${PROJECT_NAME} PUBLIC ${SCREEN_MANAGER})
-
 target_sources(${PROJECT_NAME} PUBLIC ${THREAD_MANAGER})
 
 target_sources(${PROJECT_NAME} PUBLIC ${OBJECT_MANAGER})
 
 target_sources(${PROJECT_NAME} PUBLIC ${THREAD_CLIENT})
 
-target_sources(${PROJECT_NAME} PUBLIC ${WINDOW_CONTAINER})
+target_sources(${PROJECT_NAME} PUBLIC ${WINDOW})
 
-target_sources(${PROJECT_NAME} PUBLIC ${WINDOW_CONTAINER_FACTORY})
+target_sources(${PROJECT_NAME} PUBLIC ${WINDOW_FACTORY})
 
 #visualisation module
 

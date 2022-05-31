@@ -9,6 +9,8 @@
 #include "MessageModule/Msg/BaseMessage.h"
 #include "MessageModule/Msg/MsgRequestBody.h"
 
+#include "VisualModule/WindowFactory/WindowFactory.h"
+
 using namespace std;
 
 class test : public MsgClient
@@ -64,8 +66,7 @@ public:
     }
 };
 
-int main(int argc, char const* argv[])
-{
+/*
     ThreadManager thrmgr;
     MsgQueue* msgqueue = new MsgQueue();
     MsgDistr* msgdistr = new MsgDistr;
@@ -93,6 +94,42 @@ int main(int argc, char const* argv[])
     cli1->SetThreadClientTag("cli_1");
     msgdistr->RegistrClient(static_cast<MsgClientInterface*>(cli1));
     thrmgr.CreateNewThread(static_cast<ThrCliFuncType>(&test::Test), cli1, "");
+*/
 
-    while(1){}
+int main(int argc, char const* argv[])
+{
+    WindowFactory winfac;
+
+    WindowInterface* basewin = winfac.CreateWindow(WIN_TYPE_MAIN);
+
+    vector<Drawable*>* Obj = new vector<Drawable*>;
+
+    int x(0), y(0);
+
+    for(int i = 0; i < 100; i++)
+    {
+        RectangleShape* shape = new RectangleShape();
+
+        shape->setFillColor(Color(255, 0, 0, 255));
+        shape->setPosition(x, y);
+        shape->setSize(Vector2f(10, 10));
+
+        x+=10;
+        if(x >= 1000)
+        {
+            x = 0; 
+            y+=10;
+        }
+
+        Obj->push_back(shape);
+    }
+
+    basewin->SetObjectsToDraw(Obj);
+
+    delete(Obj);
+
+    while(basewin->IsWindowOpen())
+    {
+        basewin->DisplayWindow();
+    }
 }
