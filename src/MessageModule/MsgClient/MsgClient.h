@@ -22,12 +22,6 @@ private:
 
     MsgQueue* SharedMessageQueue;
 
-    queue<MessageRequest*> MessagesToSend;
-    queue<MessageAnswer*> Answers;
-
-    bool MessagesReadyToSend;
-    bool AnswersReadyToSend;
-
     void ConsoleMessage(string MessageToConsole);
 
 public:
@@ -41,17 +35,12 @@ public:
     void AddMessage(MessageRequest* MessageToAdd);
     void AddAnswer(MessageAnswer* AnswerToAdd);
 
-    virtual MessageAnswer* ConstructAnswer(MessageRequest* MessageToAnswerTo);
-    virtual void ReactToAnswer(MessageAnswer* AnswerToReactTo);
+    virtual MessageAnswer* MessageRecievedCallback(MessageRequest* MessageToReactTo);
+    virtual void HandleAnswer(MessageAnswer* AnswerToReactTo);
+    void OnMessageRecieved(BaseMessage* Message) override;
 
-    void OnMessageRecive(MessageRequest* MessageToAdd) override;
-    void OnAnswerRecive(MessageAnswer* RecivedAnswer) override;
-    vector<MessageAnswer*>* GetAnswers() override;
-    vector<MessageRequest*>* GetMessagesToSend() override;
     MsgCliName GetClientName() override;
     string GetClientTag() override;
-    bool IsMessagesReady() override;
-    bool IsAnswersReady() override;
 };
 
 #endif

@@ -15,14 +15,17 @@ class BaseMessage
 private:
     MsgCliName Sender;
     MsgCliName Recipient;
+    MsgType MessageType;
 
 public:
     BaseMessage();
     virtual ~BaseMessage();
 
+    void SetMessageType(MsgType NewMessageType);
     void SetMessageSender(MsgCliName NewSender);
     void SetMessageRecipient(MsgCliName NewRecipient);
 
+    MsgType GetMessageType();
     MsgCliName GetMessageSender();
     MsgCliName GetMessageRecipient();
 };

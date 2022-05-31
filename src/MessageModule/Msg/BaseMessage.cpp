@@ -2,7 +2,8 @@
 
 BaseMessage::BaseMessage() :
 Sender(MSG_CLI_NONE),
-Recipient(MSG_CLI_NONE)
+Recipient(MSG_CLI_NONE),
+MessageType(MSG_TYPE_NONE)
 {
     cout << "message construted" << endl;
 }
@@ -32,12 +33,23 @@ MsgCliName BaseMessage::GetMessageRecipient()
     return Recipient;
 }
 
+void BaseMessage::SetMessageType(MsgType NewMessageType)
+{
+    MessageType = NewMessageType;
+}
+
+MsgType BaseMessage::GetMessageType()
+{
+    return MessageType;
+}
+
 //request message
 
 MessageRequest::MessageRequest(MsgRequestBody NewMsgBody) :
 MessageBody(MSG_REQ_NONE)
 {
     MessageBody = NewMsgBody;
+    SetMessageType(MSG_TYPE_REQUEST);
 }
 
 MessageRequest::~MessageRequest()
@@ -55,6 +67,7 @@ MsgRequestBody MessageRequest::GetMessageBody()
 
 MessageAnswer::MessageAnswer()
 {
+    SetMessageType(MSG_TYPE_ANSWER);
 }
 
 MessageAnswer::~MessageAnswer()

@@ -11,6 +11,8 @@
 #include "../MsgClient/MsgClientName.h"
 #include "../../ThreadClient/ThreadClient.h"
 
+#include "../MsgQueue/MsgQueue.h"
+
 using namespace std;
 
 class MsgDistr : public ThreadClient
@@ -18,10 +20,9 @@ class MsgDistr : public ThreadClient
 private:
     vector<MsgClientInterface*> MessageClients;
 
-    void MessagingLoop();
+    MsgQueue* SharedMessageQueue;
 
-    void SendClientsMessages(MsgClientInterface* Client);
-    void SendClientsAnswers(MsgClientInterface* Client);
+    void MessagingLoop();
 
     MsgClientInterface* GetClientByName(MsgCliName NameOfClientToGet);
 
@@ -30,7 +31,7 @@ public:
     ~MsgDistr();
 
     void StartMessagingLoop();
-
+    void SetSharedMsgQueue(MsgQueue* NewSharedMsgQueue);
     void RegistrClient(MsgClientInterface* NewClient);
 };
 

@@ -1,6 +1,7 @@
 #include "MsgDistr.h"
 
-MsgDistr::MsgDistr()
+MsgDistr::MsgDistr() : 
+SharedMessageQueue(nullptr)
 {
 }
 
@@ -27,81 +28,39 @@ void MsgDistr::RegistrClient(MsgClientInterface* NewClient)
     }
 }
 
-/*
 void MsgDistr::MessagingLoop()
 {
+    vector<BaseMessage*>* MessageTmp = nullptr;
+    MsgClientInterface* ClientTmp = nullptr;
+
     cout << "Started messaging loop" << endl;
     while(1)
-    {
-        for(auto CurrentClient : MessageClients)
+    {   
+        if(SharedMessageQueue != nullptr)
         {
-            if(CurrentClient != nullptr)
+            if(SharedMessageQueue->GetQueueSize() > 0)
             {
-                cout << "Checking up for messages and answers for client " << CurrentClient->GetClientName() << "(" << CurrentClient->GetClientTag() << ")" << endl;
-
-                if (CurrentClient->IsMessagesReady())
-                    SendClientsMessages(CurrentClient);
-                if(CurrentClient->IsAnswersReady())
-                    SendClientsAnswers(CurrentClient);
+                Lock();
+                MessageTmp = SharedMessageQueue->GetFrontMessage();
+                Unlock();
+                for(auto CurrentMessageToSend : *MessageTmp)
+                {
+                    if(CurrentMessageToSend != nullptr)
+                    {
+                        ClientTmp = GetClientByName(CurrentMessageToSend->GetMessageRecipient());
+                        if(ClientTmp != nullptr)
+                        {
+                            ClientTmp->OnMessageRecieved(CurrentMessageToSend);
+                        }
+                        else
+                        {
+                            cout << "client is nullprt" << endl;
+                        }
+                    }
+                }
+                delete(MessageTmp);
             }
         }
-        std::this_thread::sleep_for(10000ms);
-    }
-}*/
-
-void MsgDistr::SendClientsMessages(MsgClientInterface* Client)
-{
-    Lock();
-    vector<MessageRequest*>* MessagesTmp = Client->GetMessagesToSend();
-    Unlock();
-
-    if(MessagesTmp != nullptr)
-    {
-        cout << "Client " << Client->GetClientName() << "(" << Client->GetClientTag() << ") returned message set with " << MessagesTmp->size() << " messages" << endl;
-        for(auto CurrentMessageToSend : *MessagesTmp)
-        {
-            MsgClientInterface* Recipient = GetClientByName(CurrentMessageToSend->GetMessageRecipient());
-            if(Recipient != nullptr)
-            {
-                Recipient->OnMessageRecive(CurrentMessageToSend);
-                cout << "Send message to " << Recipient->GetClientName() << "(" << Recipient->GetClientTag() << ")" << endl;
-            }
-            else
-            {
-                cout << "Recipient " << CurrentMessageToSend->GetMessageRecipient() << " is nullptr" << endl;
-            }
-        }
-    }
-    else
-    {
-        cout << "Client " << Client->GetClientName() << "(" << Client->GetClientTag() << ") returned empty message set" << endl;
-    }
-}
-
-void MsgDistr::SendClientsAnswers(MsgClientInterface* Client)
-{
-    vector<MessageAnswer*>* AnswersTmp = Client->GetAnswers();
-
-    if(AnswersTmp != nullptr)
-    {
-        cout << "Client " << Client->GetClientName() << "(" << Client->GetClientTag() << ") returned answer set with " << AnswersTmp->size() << " answers" << endl;
-        for(auto CurrentAnswer : *AnswersTmp)
-        {
-            MsgClientInterface* Recipient = GetClientByName(CurrentAnswer->GetMessageRecipient());
-            if(Recipient != nullptr)
-            {
-                Recipient->OnAnswerRecive(CurrentAnswer);
-                cout << "Send answer to " << Recipient->GetClientName() << "(" << Recipient->GetClientTag() << ")" << endl;
-            }
-            else
-            {
-                cout << "Recipient " << CurrentAnswer->GetMessageRecipient() << " is nullptr" << endl;
-            }
-        }
-    }
-    else
-    {
-        cout << "Client " << Client->GetClientName() << "(" << Client->GetClientTag() << ") returned empty answer set" << endl;
     }
 }
 
@@ -126,4 +85,9 @@ MsgClientInterface* MsgDistr::GetClientByName(MsgCliName NameOfClientToGet)
 void MsgDistr::StartMessagingLoop()
 {
     MessagingLoop();
+}
+
+void MsgDistr::SetSharedMsgQueue(MsgQueue* NewSharedMsgQueue)
+{
+    SharedMessageQueue = NewSharedMsgQueue;
 }

@@ -17,7 +17,7 @@ void ThreadClient::Lock()
     if(SharedMutex != nullptr)
     {
         SharedMutex->lock();
-        cout << "Mutex is locked by " << ThreadClientTag << endl;
+        cout << "mutex is locked by " << ThreadClientTag << endl;
     }
     else
     {

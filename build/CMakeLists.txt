@@ -68,6 +68,9 @@ set(MESSAGE ${MESSAGE_DISTR_DIR}/Msg/BaseMessage.cpp
             ${MESSAGE_DISTR_DIR}/Msg/BaseMessage.h
             ${MESSAGE_DISTR_DIR}/Msg/MsgRequestBody.h)
 
+set(MSG_SHARED_QUEUE ${MESSAGE_DISTR_DIR}/MsgQueue/MsgQueue.cpp
+                     ${MESSAGE_DISTR_DIR}/MsgQueue/MsgQueue.h)
+
 #messaging module
 
 add_executable(${PROJECT_NAME} ${SRC_DIR}/main.cpp)
@@ -112,6 +115,8 @@ target_sources(${PROJECT_NAME} PUBLIC ${MSG_DISTR})
 target_sources(${PROJECT_NAME} PUBLIC ${MSG_CLIENT})
 
 target_sources(${PROJECT_NAME} PUBLIC ${MESSAGE})
+
+target_sources(${PROJECT_NAME} PUBLIC ${MSG_SHARED_QUEUE})
 
 #messaging module
 

@@ -3,8 +3,6 @@
 MsgClient::MsgClient() : 
 TagOfClient("msg_cli_notag"),
 NameOfClient(MSG_CLI_NONE),
-MessagesReadyToSend(false),
-AnswersReadyToSend(false),
 SharedMessageQueue(nullptr)
 {
     cout << "Created new msg_client" << endl;
@@ -30,16 +28,21 @@ void MsgClient::AddMessage(MessageRequest* MessageToAdd)
 {
     if(SharedMessageQueue != nullptr)
     {
-        Lock();
-        SharedMessageQueue->AddNewMessageToQueue(static_cast<BaseMessage*>(MessageToAdd));
-        Unlock();
+        if(MessageToAdd->GetMessageType() == MSG_TYPE_REQUEST)
+        {
+            Lock();
+            SharedMessageQueue->AddNewMessageToQueue(static_cast<BaseMessage*>(MessageToAdd));
+            Unlock();
+        }
+        else
+        {
+            ConsoleMessage("wrong message type");
+        }
     }
     else
     {
-        ConsoleMessage("shared message queue is null");
+        ConsoleMessage("shared message queue is nullptr");
     }
-    MessagesReadyToSend = true;
-    //ConsoleMessage(string("added messages; message queue size is " + to_string(MessagesToSend.size())));
 }
 
 void MsgClient::AddAnswer(MessageAnswer* AnswerToAdd)
@@ -47,61 +50,21 @@ void MsgClient::AddAnswer(MessageAnswer* AnswerToAdd)
     
     if(SharedMessageQueue != nullptr)
     {
-        Lock();
-        SharedMessageQueue->AddNewMessageToQueue(static_cast<BaseMessage*>(AnswerToAdd));
-        Unlock();
+        if(AnswerToAdd->GetMessageType() == MSG_TYPE_ANSWER)
+        {
+            Lock();
+            SharedMessageQueue->AddNewMessageToQueue(static_cast<BaseMessage*>(AnswerToAdd));
+            Unlock();
+        }
+        else
+        {
+            ConsoleMessage("wrong message type");
+        }
     }
     else
     {
         ConsoleMessage("shared message queue is null");
     }
-    
-    AnswersReadyToSend = true;
-    //ConsoleMessage(string("added answer; answer queue size is " + to_string(Answers.size())));
-}
-
-vector<MessageAnswer*>* MsgClient::GetAnswers()
-{
-    vector<MessageAnswer*>* AnswersContainer = new vector<MessageAnswer*>;
-    ConsoleMessage(string("answer queue size is " + to_string(Answers.size())));
-    for(int i = 0; i < Answers.size(); i++)
-    {
-        if(Answers.front() != nullptr)
-        {
-            AnswersContainer->push_back(Answers.front());
-        }
-        else
-        {
-            ConsoleMessage("nullptr answer!");
-        }
-        Answers.pop();
-    }
-    ConsoleMessage(string("answer queue size is " + to_string(Answers.size())));
-    ConsoleMessage("returned answers");
-    AnswersReadyToSend = false;
-    return AnswersContainer;
-}
-
-vector<MessageRequest*>* MsgClient::GetMessagesToSend()
-{
-    vector<MessageRequest*>* MessagesContainer = new vector<MessageRequest*>;
-    ConsoleMessage(string("message queue size is " + to_string(MessagesToSend.size())));
-    for(int i = 0; i < MessagesToSend.size(); i++)
-    {
-        if(MessagesToSend.front() != nullptr)
-        {
-            MessagesContainer->push_back(MessagesToSend.front());
-        }
-        else
-        {
-            ConsoleMessage("nullptr message!");
-        }
-        MessagesToSend.pop();
-    }
-    ConsoleMessage(string("message queue size is " + to_string(MessagesToSend.size())));
-    ConsoleMessage("returned messages");
-    MessagesReadyToSend = false;
-    return MessagesContainer;
 }
 
 MsgCliName MsgClient::GetClientName()
@@ -116,71 +79,46 @@ string MsgClient::GetClientTag()
     ConsoleMessage("returned tag");
 }
 
-void MsgClient::OnMessageRecive(MessageRequest* MessageToAdd)
-{
-    AddAnswer(ConstructAnswer(MessageToAdd));
-}
-
-void MsgClient::OnAnswerRecive(MessageAnswer* RecivedAnswer)
-{
-    ReactToAnswer(RecivedAnswer);
-    ConsoleMessage("recieved answer");
-}
-
 void MsgClient::ConsoleMessage(string MessageToConsole)
 {
     cout << "msg_client " << NameOfClient << "(" << TagOfClient << ") " << MessageToConsole << endl;
-}
-
-MessageAnswer* MsgClient::ConstructAnswer(MessageRequest* MessageToAnswerTo)
-{
-    MessageAnswer* Answer = new MessageAnswer();
-
-    if(MessageToAnswerTo->GetMessageRecipient() == this->NameOfClient)
-    {
-        switch (MessageToAnswerTo->GetMessageBody())
-        {
-        case MSG_REQ_NONE:
-            ConsoleMessage("NONE message recieved");
-            break;
-        
-        case MSG_REQ_GET_0:
-            ConsoleMessage("Message_0 recieved");
-        break;
-
-        case MSG_REQ_GET_1:
-            ConsoleMessage("Message_1 recieved");
-        break;
-
-        default:
-            ConsoleMessage("MESSAGING ERROR NOT STATED REQUEST MESSAGE_BODY");
-            break;
-        }
-    }
-
-    return Answer;
-}
-
-void MsgClient::ReactToAnswer(MessageAnswer* AnswerToReactTo)
-{
-    MsgCliName AnswerSender = AnswerToReactTo->GetMessageSender();
-
-    string ConsoleMessageStr = "got answer from client " +  to_string(AnswerSender);
-
-    ConsoleMessage(ConsoleMessageStr);
-}
-
-bool MsgClient::IsMessagesReady()
-{
-    return MessagesReadyToSend;
-}
-
-bool MsgClient::IsAnswersReady()
-{
-    return AnswersReadyToSend;
 }
 
 void MsgClient::SetSharedMsgQueue(MsgQueue* NewSharedMsgQueue)
 {
     SharedMessageQueue = NewSharedMsgQueue;
 }
+
+void MsgClient::OnMessageRecieved(BaseMessage* Message)
+{
+    MsgType MessageType = Message->GetMessageType();
+    switch (MessageType)
+    {
+    case MSG_TYPE_NONE:
+        cout << "NONE type of massege" << endl;
+        delete(Message);
+        break;
+    
+    case MSG_TYPE_REQUEST:
+        SharedMessageQueue->AddNewMessageToQueue(static_cast<BaseMessage*>(MessageRecievedCallback(static_cast<MessageRequest*>(Message))));
+        break;
+
+    case MSG_TYPE_ANSWER:
+        HandleAnswer(static_cast<MessageAnswer*>(Message));
+        break;
+
+    default:
+        cout << "ERROR NOT STATED MESSAGE TYPE" << endl;
+        break;
+    }
+}
+
+MessageAnswer* MsgClient::MessageRecievedCallback(MessageRequest* MessageToReactTo)
+{
+    MessageAnswer* mes = new MessageAnswer();
+    ConsoleMessage("base class method called, override required; sending empty answer");
+    return mes;
+}
+
+void MsgClient::HandleAnswer(MessageAnswer* AnswerToReactTo)
+{}

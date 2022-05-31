@@ -3,6 +3,8 @@
 #define MSGQUEUE_H
 
 #include <queue>
+#include <stack>
+#include <vector>
 #include <iostream>
 #include <string>
 #include "../Msg/BaseMessage.h"
@@ -19,7 +21,8 @@ public:
     ~MsgQueue();
 
     void AddNewMessageToQueue(BaseMessage* NewMessage);
-    BaseMessage* GetFrontMessage();
+    vector<BaseMessage*>* GetFrontMessage();
+    int GetQueueSize();
 };
 
 #endif
