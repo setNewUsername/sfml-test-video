@@ -5,7 +5,8 @@
 enum WinType
 {
     WIN_TYPE_NONE = -1,
-    WIN_TYPE_MAIN
+    WIN_TYPE_MAIN,
+    WIN_TYPE_0
 };
 
 #endif

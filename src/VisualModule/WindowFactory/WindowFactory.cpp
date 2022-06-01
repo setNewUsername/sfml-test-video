@@ -22,6 +22,10 @@ WindowInterface* WindowFactory::CreateWindow(WinType TypeOfNewWindow)
         NewWindow = CreateMainWindow();
         break;
 
+    case WIN_TYPE_0:
+        NewWindow = CreateTestWindow();
+        break;
+
     default:
         cout << "Where is no window of that type" << endl;
         break;
@@ -33,9 +37,17 @@ WindowInterface* WindowFactory::CreateWindow(WinType TypeOfNewWindow)
 
 WindowInterface* WindowFactory::CreateMainWindow()
 {
+    MainWindow* Window = new MainWindow();
+
+    return static_cast<WindowInterface*>(Window);
+}
+
+WindowInterface* WindowFactory::CreateTestWindow()
+{
     BaseWindow* Window = new BaseWindow();
-    Window->SetWindowType(WIN_TYPE_MAIN);
-    Window->SetWindowName("Main window");
+    Window->SetWindowType(WIN_TYPE_0);
+    Window->SetWindowName("TEST WINDOW");
+    Window->SetVisible(false);
 
     return static_cast<WindowInterface*>(Window);
 }

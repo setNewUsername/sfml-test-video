@@ -11,6 +11,8 @@
 
 #include "VisualModule/WindowFactory/WindowFactory.h"
 
+#include "VisualModule/WindowManager/WindowManager.h"
+
 using namespace std;
 
 class test : public MsgClient
@@ -99,8 +101,11 @@ public:
 int main(int argc, char const* argv[])
 {
     WindowFactory winfac;
+    WindowManager winmgr;
 
-    WindowInterface* basewin = winfac.CreateWindow(WIN_TYPE_MAIN);
+    winmgr.SetWindowFactory(&winfac);
+
+    winmgr.SetupScreen();
 
     vector<Drawable*>* Obj = new vector<Drawable*>;
 
@@ -124,12 +129,12 @@ int main(int argc, char const* argv[])
         Obj->push_back(shape);
     }
 
-    basewin->SetObjectsToDraw(Obj);
+    winmgr.GetWindowByType(WIN_TYPE_MAIN)->SetObjectsToDraw(Obj);
 
     delete(Obj);
 
-    while(basewin->IsWindowOpen())
+    while(winmgr.GetWindowByType(WIN_TYPE_MAIN)->IsWindowOpen())
     {
-        basewin->DisplayWindow();
+        winmgr.ShowAllWindows();
     }
 }

@@ -3,9 +3,11 @@
 BaseWindow::BaseWindow() : 
 Window(nullptr),
 BackGroundColor(Color::Black),
-WindowType(WIN_TYPE_NONE)
+WindowType(WIN_TYPE_NONE),
+ResizeEnabled(true),
+WindowName("none")
 {
-    Window = new RenderWindow(VideoMode(100, 100, 32), "none");
+    Window = this->CreateWindow();
     Window->setFramerateLimit(30);
 }
 
@@ -20,6 +22,11 @@ void BaseWindow::EventProcessing()
     {
         if (event.type == Event::Closed)
             Window->close();
+        if(event.type == Event::KeyPressed)
+        {
+            if (event.key.code == sf::Keyboard::Escape)
+                Window->close();
+        }
     }
 }
 
@@ -48,12 +55,21 @@ bool BaseWindow::IsWindowOpen()
 
 void BaseWindow::SetWindowName(string const NewWindowName)
 {
-    Window->setTitle(NewWindowName);
+    WindowName = NewWindowName;
+    Window->setTitle(WindowName);
 }
 
 void BaseWindow::SetWindowSize(unsigned int const NewWindowWidth, unsigned int const NewWindowHeight)
 {
-    Window->setSize(Vector2u(NewWindowWidth, NewWindowHeight));
+    if(ResizeEnabled)
+        Window->setSize(Vector2u(NewWindowWidth, NewWindowHeight));
+}
+
+void BaseWindow::SetFullScreen()
+{
+    Window->setSize(Vector2u(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height));
+    Window->setPosition(Vector2(0, 0));
+    ResizeEnabled = false;
 }
 
 void BaseWindow::SetWindowPosition(unsigned int const NewWindowXpos, unsigned int const NewWindowYpos)
@@ -79,4 +95,26 @@ WinType BaseWindow::GetWindowType()
 void BaseWindow::SetWindowType(WinType NewWindowType)
 {
     WindowType = NewWindowType;
+}
+
+void BaseWindow::SetVisible(bool Visible)
+{
+    Window->setVisible(Visible);
+}
+
+RenderWindow* BaseWindow::CreateWindow()
+{
+    cout << "Creating new window; BaseWindow" << endl; 
+    return new RenderWindow(VideoMode(100, 100, 32), WindowName, Style::Default);
+}
+
+void BaseWindow::SetWindow(RenderWindow* NewWindow)
+{
+    if(NewWindow != nullptr)
+    {   
+        delete(Window);
+        Window = NewWindow;
+    }
+    else
+        cout << "ERROR NEW WINDOW IS NULLPTR" << endl;
 }

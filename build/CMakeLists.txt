@@ -12,6 +12,8 @@ set(SORTER_DIR ${SRC_DIR}/Sorter)
 set(MESSAGE_DISTR_DIR ${SRC_DIR}/MessageModule)
 set(VISUAL_MODULE_DIR ${SRC_DIR}/VisualModule)
 
+set(WINDOW_TYPES_DIR ${VISUAL_MODULE_DIR}/Window)
+
 #visualisation module
 
 set(THREAD_MANAGER ${SRC_DIR}/ThreadManager/ThreadManager.cpp ${SRC_DIR}/ThreadManager/ThreadManager.h)
@@ -27,6 +29,16 @@ set(WINDOW ${VISUAL_MODULE_DIR}/Window/BaseWindow.h
 
 set(WINDOW_FACTORY ${VISUAL_MODULE_DIR}/WindowFactory/WindowFactory.h
                    ${VISUAL_MODULE_DIR}/WindowFactory/WindowFactory.cpp)
+
+set(WINDOW_MANAGER  ${VISUAL_MODULE_DIR}/WindowManager/WindowManager.h
+                    ${VISUAL_MODULE_DIR}/WindowManager/WindowManager.cpp)
+
+    #window types
+
+    set(MAIN_WINDOW ${WINDOW_TYPES_DIR}/MainWindow/MainWindow.h
+                    ${WINDOW_TYPES_DIR}/MainWindow/MainWindow.cpp)
+
+    #window types
 
 #visualisation module
 
@@ -81,6 +93,14 @@ target_sources(${PROJECT_NAME} PUBLIC ${THREAD_CLIENT})
 target_sources(${PROJECT_NAME} PUBLIC ${WINDOW})
 
 target_sources(${PROJECT_NAME} PUBLIC ${WINDOW_FACTORY})
+
+target_sources(${PROJECT_NAME} PUBLIC ${WINDOW_MANAGER})
+
+    #window types
+
+    target_sources(${PROJECT_NAME} PUBLIC ${MAIN_WINDOW})
+
+    #window types
 
 #visualisation module
 

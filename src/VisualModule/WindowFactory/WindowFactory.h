@@ -8,6 +8,7 @@
 #include "../Window/WindowInterface.h"
 #include "../Window/BaseWindow.h"
 #include "../Window/WindowType.h"
+#include "../Window/MainWindow/MainWindow.h"
 
 using namespace std;
 
@@ -15,6 +16,7 @@ class WindowFactory
 {
 private:
     WindowInterface* CreateMainWindow();
+    WindowInterface* CreateTestWindow();
 
 public:
     WindowFactory();
