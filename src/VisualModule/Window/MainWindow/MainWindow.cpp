@@ -14,5 +14,5 @@ MainWindow::~MainWindow()
 
 RenderWindow* MainWindow::CreateWindow()
 {
-    return new RenderWindow(VideoMode(100, 100, 32), "Main Window", Style::Fullscreen);
+    return new RenderWindow(VideoMode(100, 100, 32), "Main Window", Style::Default);
 }

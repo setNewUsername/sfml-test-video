@@ -27,6 +27,8 @@ public:
 
     WindowInterface* GetWindowByType(WinType WindowToGet, bool MuteMessage = false);
 
+    void Test();
+
     void SetupScreen();
     void ShowAllWindows();
 };

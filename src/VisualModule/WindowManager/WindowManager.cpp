@@ -31,7 +31,7 @@ void WindowManager::SetupScreen()
     if(WindowFac != nullptr)
     {
         AddNewWindow(WIN_TYPE_MAIN);
-        AddNewWindow(WIN_TYPE_0);
+        //AddNewWindow(WIN_TYPE_0);
     }
     else
         cout << "Window factory is nullptr" << endl;
@@ -39,14 +39,20 @@ void WindowManager::SetupScreen()
 
 void WindowManager::ShowAllWindows()
 {
-    for(auto CurrentWindow : WindowCollection)
+    while (1)
     {
-        if(CurrentWindow != nullptr)
+        for(auto CurrentWindow : WindowCollection)
         {
-            CurrentWindow->DisplayWindow();
-        }  
-        else
-            cout << "Window is nullptr" << endl;
+            if(CurrentWindow != nullptr)
+            {
+                if(CurrentWindow->IsWindowOpen())
+                {
+                    CurrentWindow->DisplayWindow();
+                }
+            }  
+            else
+                cout << "Window is nullptr" << endl;
+        }
     }
 }
 
@@ -71,4 +77,12 @@ WindowInterface* WindowManager::GetWindowByType(WinType WindowToGet, bool MuteMe
     if(Result == nullptr && !MuteMessage)
         cout << "Where is no window of that type" << endl;
     return Result;
+}
+
+void WindowManager::Test()
+{
+    while(GetWindowByType(WIN_TYPE_MAIN)->IsWindowOpen())
+    {
+        ShowAllWindows();
+    }
 }
