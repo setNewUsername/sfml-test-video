@@ -40,9 +40,9 @@ void MsgDistr::MessagingLoop()
         {
             if(SharedMessageQueue->GetQueueSize() > 0)
             {
-                Lock();
+                //Lock();
                 MessageTmp = SharedMessageQueue->GetFrontMessage();
-                Unlock();
+                //Unlock();
                 for(auto CurrentMessageToSend : *MessageTmp)
                 {
                     if(CurrentMessageToSend != nullptr)

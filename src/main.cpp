@@ -1,30 +1,80 @@
 #include <iostream>
-#include "ThreadManager/ThreadManager.h"
 
-#include "MessageModule/MsgDistr/MsgDistr.h"
-#include "MessageModule/MsgClient/MsgClient.h"
-#include "MessageModule/MsgClient/MsgClientName.h"
+#include "ThreadModule/ThreadManager/ThreadManager.h"
+#include "ThreadModule/ThreadClient/ThreadClient.h"
 
-#include "MessageModule/MsgQueue/MsgQueue.h"
-#include "MessageModule/Msg/BaseMessage.h"
-#include "MessageModule/Msg/MsgRequestBody.h"
-
-#include "VisualModule/WindowFactory/WindowFactory.h"
-
-#include "VisualModule/WindowManager/WindowManager.h"
-
-#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 
 using namespace std;
 
+class TestClass : public ThreadClient
+{
+private:
+    
+public:
+    TestClass();
+    ~TestClass();
+
+    void FunctionToThread() override;
+};
+
+TestClass::TestClass()
+{
+}
+
+TestClass::~TestClass()
+{
+}
+
+void TestClass::FunctionToThread()
+{
+    while(1)
+    {
+        Lock();
+        cout << "1" << endl;
+        sf::sleep(sf::milliseconds(100));
+        Unlock();
+    }
+}
+
+class TestClass2 : public ThreadClient
+{
+private:
+    
+public:
+    TestClass2();
+    ~TestClass2();
+
+    void FunctionToThread() override;
+};
+
+TestClass2::TestClass2()
+{
+}
+
+TestClass2::~TestClass2()
+{
+}
+
+void TestClass2::FunctionToThread()
+{
+    while(1)
+    {
+        Lock();
+        cout << "2" << endl;
+        Unlock();
+    }
+}
+
 int main(int argc, char const* argv[])
 {
-    WindowFactory winfac;
-    WindowManager winmgr;
+    TestClass* tstcls = new TestClass();
+    TestClass2* tstcls2 = new TestClass2();
 
-    winmgr.SetWindowFactory(&winfac);
+    ThreadManager* thrmgr = new ThreadManager();
 
-    winmgr.SetupScreen();
+    tstcls->SetSharedMutex(thrmgr->GetSharedMutex());
+    tstcls2->SetSharedMutex(thrmgr->GetSharedMutex());
 
-    winmgr.ShowAllWindows();
+    thrmgr->CreateThread(tstcls);
 }

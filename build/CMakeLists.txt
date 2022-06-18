@@ -14,13 +14,18 @@ set(VISUAL_MODULE_DIR ${SRC_DIR}/VisualModule)
 
 set(WINDOW_TYPES_DIR ${VISUAL_MODULE_DIR}/Window)
 
-#visualisation module
+#thread module
 
-set(THREAD_MANAGER ${SRC_DIR}/ThreadManager/ThreadManager.cpp ${SRC_DIR}/ThreadManager/ThreadManager.h)
+set(THREAD_MANAGER ${SRC_DIR}/ThreadModule/ThreadManager/ThreadManager.cpp ${SRC_DIR}/ThreadModule/ThreadManager/ThreadManager.h)
 
 set(OBJECT_MANAGER ${SRC_DIR}/ObjectManager/ObjectManager.cpp ${SRC_DIR}/ObjectManager/ObjectManager.h)
 
-set(THREAD_CLIENT ${SRC_DIR}/ThreadClient/ThreadClient.cpp ${SRC_DIR}/ThreadClient/ThreadClient.h)
+set(THREAD_CLIENT ${SRC_DIR}/ThreadModule/ThreadClient/ThreadClient.cpp ${SRC_DIR}/ThreadModule/ThreadClient/ThreadClient.h)
+
+#thread module
+
+
+#visualisation module
 
 set(WINDOW ${VISUAL_MODULE_DIR}/Window/BaseWindow.h
            ${VISUAL_MODULE_DIR}/Window/BaseWindow.cpp
@@ -62,6 +67,7 @@ set(SORTER_FACTORY ${SORTER_DIR}/SorterFactory/SorterFactory.cpp ${SORTER_DIR}/S
 
 #sortiration module
 
+
 #messaging module
 
 set(MSG_DISTR ${MESSAGE_DISTR_DIR}/MsgDistr/MsgDistr.cpp ${MESSAGE_DISTR_DIR}/MsgDistr/MsgDistr.h)
@@ -81,6 +87,7 @@ set(MSG_SHARED_QUEUE ${MESSAGE_DISTR_DIR}/MsgQueue/MsgQueue.cpp
 #messaging module
 
 add_executable(${PROJECT_NAME} ${SRC_DIR}/main.cpp)
+
 
 #visualisation module
 
@@ -104,11 +111,13 @@ target_sources(${PROJECT_NAME} PUBLIC ${WINDOW_MANAGER})
 
 #visualisation module
 
+
 #array module
 
 target_sources(${PROJECT_NAME} PUBLIC ${ARRAY_CONTAINER})
 
 #array module
+
 
 #sortiration module
 

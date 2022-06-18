@@ -9,12 +9,12 @@
 #include "../Msg/BaseMessage.h"
 #include "MsgClientName.h"
 #include "MsgClientInterface.h"
-#include "../../ThreadClient/ThreadClient.h"
+#include "../../ThreadModule/ThreadClient/ThreadClient.h"
 #include "../MsgQueue/MsgQueue.h"
 
 using namespace std;
 
-class MsgClient : public MsgClientInterface, public ThreadClient
+class MsgClient : public MsgClientInterface//, public ThreadClient
 {
 private:
     string TagOfClient;

@@ -9,13 +9,13 @@
 
 #include "../MsgClient/MsgClientInterface.h"
 #include "../MsgClient/MsgClientName.h"
-#include "../../ThreadClient/ThreadClient.h"
+#include "../../ThreadModule/ThreadClient/ThreadClient.h"
 
 #include "../MsgQueue/MsgQueue.h"
 
 using namespace std;
 
-class MsgDistr : public ThreadClient
+class MsgDistr// : public ThreadClient
 {
 private:
     vector<MsgClientInterface*> MessageClients;

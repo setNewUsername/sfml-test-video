@@ -30,9 +30,9 @@ void MsgClient::AddMessage(MessageRequest* MessageToAdd)
     {
         if(MessageToAdd->GetMessageType() == MSG_TYPE_REQUEST)
         {
-            Lock();
+            //Lock();
             SharedMessageQueue->AddNewMessageToQueue(static_cast<BaseMessage*>(MessageToAdd));
-            Unlock();
+            //Unlock();
         }
         else
         {
@@ -52,9 +52,9 @@ void MsgClient::AddAnswer(MessageAnswer* AnswerToAdd)
     {
         if(AnswerToAdd->GetMessageType() == MSG_TYPE_ANSWER)
         {
-            Lock();
+            //Lock();
             SharedMessageQueue->AddNewMessageToQueue(static_cast<BaseMessage*>(AnswerToAdd));
-            Unlock();
+            //Unlock();
         }
         else
         {

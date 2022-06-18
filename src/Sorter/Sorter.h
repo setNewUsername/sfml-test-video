@@ -3,7 +3,6 @@
 #define SORTER_H
 
 #include "../ArrayContainer/ArrayContainer.h"
-#include "../ThreadClient/ThreadClient.h"
 
 class Sorter// : public ThreadClient
 {
